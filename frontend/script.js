@@ -11,10 +11,10 @@ const submitForm = async (e) => {
 
     for (let i = 0; i < files.files.length; i++) {
         try {
-            let x = await splitEncode(files.files[i]);
+            let encoded = await splitEncode(files.files[i]);
 			let filename = files.files[i].name
-            console.log(x);
-            let blob = new Blob([JSON.stringify(x)], {type : "application/json"})
+            console.log(encoded);
+            let blob = new Blob([JSON.stringify(encoded)], {type : "application/json"})
             formData.append("files", blob, filename);
         } catch (error) {
             console.log(error);
@@ -30,19 +30,8 @@ const submitForm = async (e) => {
         .catch((err) => ("Error occured", err));
 };
 
-function blobToBase64(blob) {
-    var reader = new FileReader();
-
-    reader.readAsDataURL(blob);
-    reader.onloadend = function () {
-        var base64data = reader.result;
-        console.log(base64data);
-        return;
-    };
-}
-
 const splitEncode = async (file) => {
-    const chunkSize = 60000; // 50KB
+    const chunkSize = 60000; // 60KB
     const filename = file.name;
     console.log("FILE - ", filename);
     const numberOfChunks = Math.ceil(file.size / chunkSize);
